@@ -1,0 +1,6 @@
+processes = search Process:Create
+regsvr_processes = filter processes where (
+  parent_image_path == "*regsvr32.exe" and image_path != "*regsvr32.exe*"
+ )
+output regsvr_processes
+

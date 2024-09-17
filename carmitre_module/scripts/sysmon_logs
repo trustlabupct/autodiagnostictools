@@ -1,0 +1,115 @@
+import json
+import os
+import win32evtlog
+
+
+def export_events(log_name, event_ids, output_file):
+    try:
+        hand = win32evtlog.OpenEventLog(None, log_name)
+    except Exception as e:
+        print(f"Error al abrir el registro de eventos {log_name}: {e}")
+        return
+
+    flags = win32evtlog.EVENTLOG_FORWARDS_READ | win32evtlog.EVENTLOG_SEQUENTIAL_READ
+
+    events_list = []
+    total = win32evtlog.GetNumberOfEventLogRecords(hand)
+    print(f"Número total de registros en {log_name}: {total}")
+
+    offset = 0
+    while True:
+        events = win32evtlog.ReadEventLog(hand, flags, offset)
+        if not events:
+            break
+
+        for event in events:
+            event_id = event.EventID & 0xFFFF  # Obtener el ID real del evento
+            if event_ids is None or event_id in event_ids:
+                data = {
+                    "EventID": event_id,
+                    "TimeGenerated": event.TimeGenerated.Format(),
+                    "SourceName": event.SourceName,
+                    "EventCategory": event.EventCategory,
+                    "EventType": event.EventType,
+                    "EventData": event.StringInserts,
+                    "ComputerName": event.ComputerName,
+                    "RecordNumber": event.RecordNumber,
+                }
+                events_list.append(data)
+        offset += len(events)
+
+    win32evtlog.CloseEventLog(hand)
+
+    # Crear el directorio de salida si no existe
+    output_dir = os.path.dirname(output_file)
+    if output_dir and not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    try:
+        with open(output_file, "w", encoding="utf-8") as f:
+            json.dump(events_list, f, indent=4)
+        print(f"Eventos exportados a {output_file} ({len(events_list)} eventos)")
+    except Exception as e:
+        print(f"Error al escribir el archivo {output_file}: {e}")
+
+
+def main():
+    # Directorio donde se guardarán los archivos JSON
+    base_dir = os.path.join(
+        os.path.expanduser("~"),
+        "Documents",
+        "GitHub",
+        "autodiagnostictools",
+        "carmitre_module",
+        "logs",
+    )
+
+    # Asegurarse de que el directorio existe
+    if not os.path.exists(base_dir):
+        os.makedirs(base_dir)
+
+    # Exportar logs de procesos
+    export_events(
+        "Microsoft-Windows-Sysmon/Operational",
+        [1],
+        os.path.join(base_dir, "process_logs.json"),
+    )
+
+    # Exportar logs de red
+    export_events(
+        "Microsoft-Windows-Sysmon/Operational",
+        [3],
+        os.path.join(base_dir, "network_logs.json"),
+    )
+
+    # Exportar logs de archivos
+    export_events(
+        "Microsoft-Windows-Sysmon/Operational",
+        [11],
+        os.path.join(base_dir, "file_logs.json"),
+    )
+
+    # Exportar logs de registro
+    export_events(
+        "Microsoft-Windows-Sysmon/Operational",
+        [12, 13],
+        os.path.join(base_dir, "registry_logs.json"),
+    )
+
+    # Exportar logs de aplicaciones (Event ID 7 en Sysmon es 'Image loaded')
+    export_events(
+        "Microsoft-Windows-Sysmon/Operational",
+        [7],
+        os.path.join(base_dir, "application_logs.json"),
+    )
+
+    # Exportar logs de sistema (Event ID 6 en Sysmon es 'Driver loaded')
+    export_events(
+        "Microsoft-Windows-Sysmon/Operational",
+        [6],
+        os.path.join(base_dir, "system_logs.json"),
+    )
+
+
+if __name__ == "__main__":
+    main()

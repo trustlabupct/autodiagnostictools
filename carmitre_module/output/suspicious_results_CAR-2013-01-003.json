@@ -1,0 +1,9 @@
+{
+    "suspicious_processes": [],
+    "suspicious_registry_keys": [],
+    "suspicious_network_logs": [],
+    "suspicious_system_logs": [],
+    "suspicious_application_logs": [],
+    "suspicious_service_logs": [],
+    "suspicious_file_logs": []
+}

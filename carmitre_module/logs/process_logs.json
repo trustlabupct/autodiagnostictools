@@ -1,0 +1,66 @@
+[
+    {
+        "EventID": 1,
+        "TimeGenerated": "Tue Sep 10 16:30:40 2024",
+        "SourceName": "SecurityCenter",
+        "EventCategory": 0,
+        "EventType": 4,
+        "EventData": null,
+        "ComputerName": "RACM",
+        "RecordNumber": 123
+    },
+    {
+        "EventID": 1,
+        "TimeGenerated": "Tue Sep 10 16:48:45 2024",
+        "SourceName": "SecurityCenter",
+        "EventCategory": 0,
+        "EventType": 4,
+        "EventData": null,
+        "ComputerName": "RACM",
+        "RecordNumber": 249
+    },
+    {
+        "EventID": 1,
+        "TimeGenerated": "Wed Sep 11 09:13:18 2024",
+        "SourceName": "Windows Search Service Profile Notification",
+        "EventCategory": 0,
+        "EventType": 4,
+        "EventData": [
+            "S-1-5-21-3110158002-99556644-4000773028-1000"
+        ],
+        "ComputerName": "RACM",
+        "RecordNumber": 268
+    },
+    {
+        "EventID": 1,
+        "TimeGenerated": "Wed Sep 11 09:13:18 2024",
+        "SourceName": "Windows Search Service Profile Notification",
+        "EventCategory": 0,
+        "EventType": 4,
+        "EventData": [
+            "S-1-5-21-3110158002-99556644-4000773028-1000"
+        ],
+        "ComputerName": "RACM",
+        "RecordNumber": 269
+    },
+    {
+        "EventID": 1,
+        "TimeGenerated": "Wed Sep 11 09:15:14 2024",
+        "SourceName": "SecurityCenter",
+        "EventCategory": 0,
+        "EventType": 4,
+        "EventData": null,
+        "ComputerName": "RACM",
+        "RecordNumber": 282
+    },
+    {
+        "EventID": 1,
+        "TimeGenerated": "Thu Sep 12 10:29:07 2024",
+        "SourceName": "SecurityCenter",
+        "EventCategory": 0,
+        "EventType": 4,
+        "EventData": null,
+        "ComputerName": "RACM",
+        "RecordNumber": 807
+    }
+]

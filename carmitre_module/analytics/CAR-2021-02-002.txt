@@ -1,0 +1,10 @@
+processes = search Process
+suspicious_processes = filter processes where (
+  (parent_image_path == C:\Windows\System32\services.exe" AND
+   image_path == "C:\Windows\System32\cmd.exe" AND
+   command_line == "*echo*" AND
+   command_line == "*\pipe\*") OR
+  (image_path == "C:\Windows\System32\rundll32.exe" AND
+   command_line == "*,a /p:*"))
+output suspicious_processes
+
