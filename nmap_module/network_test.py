@@ -1,10 +1,11 @@
 import typer
 from src.requests import host_scanner, port_scanner_tcp_syn, port_scanner_udp
-from src.parameters import Ip, PortRange 
+from src.parameters import Ip, PortRange
 import time
 
 
 app = typer.Typer()
+
 
 @app.command()
 def scan_all(ip_range: str, port_range_tcp: str, port_range_udp: str):
@@ -20,10 +21,14 @@ def scan_all(ip_range: str, port_range_tcp: str, port_range_udp: str):
     port_validation_udp = port_instance_udp.is_port_valid()
 
     # Check if there is the correct format
-    if ip_validation is True and port_validation_tcp is True and port_validation_udp is True:
+    if (
+        ip_validation is True
+        and port_validation_tcp is True
+        and port_validation_udp is True
+    ):
         hosts_list = host_scanner(ip_range)  # Host scanning
-        final_list = [(host, '') for host, _ in hosts_list]  # Formatting list
-        print (hosts_list)
+        final_list = [(host, "") for host, _ in hosts_list]  # Formatting list
+        print(hosts_list)
         # Scan TCP SYN and UDP
         print(port_scanner_tcp_syn(final_list, port_range_tcp))
         print(port_scanner_udp(final_list, port_range_udp))
@@ -42,5 +47,5 @@ def scan_all(ip_range: str, port_range_tcp: str, port_range_udp: str):
 
 if __name__ == "__main__":
     # Start timer
-    start_time = time.time() 
+    start_time = time.time()
     app()
