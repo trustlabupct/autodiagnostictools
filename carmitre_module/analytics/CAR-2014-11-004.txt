@@ -1,0 +1,3 @@
+process = search Process:Create
+wsmprovhost = filter process where (exe == "wsmprovhost.exe" and parent_exe == "svchost.exe")
+

@@ -1,0 +1,7 @@
+{
+    "analytics_repo_url": "https://car.mitre.org/analytics/",
+    "logs_dir": "C:/Users/username/Desktop/Car_mitre/logs/",
+    "analytics_dir": "C:/Users/username/Desktop/Car_mitre/analytics/",
+    "scripts_dir": "C:/Users/username/Desktop/Car_mitre/scripts/",
+    "output_dir": "C:/Users/username/Desktop/Car_mitre/output/"
+}

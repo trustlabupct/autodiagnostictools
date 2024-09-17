@@ -1,0 +1,17 @@
+{
+    "suspicious_processes": [
+        {
+            "command_line": "wevtutil sl Security /e:false"
+        }
+    ],
+    "suspicious_registry_keys": [
+        {
+            "Key": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\EventLog",
+            "value": "Start"
+        },
+        {
+            "Key": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\EventLog",
+            "value": "File"
+        }
+    ]
+}
