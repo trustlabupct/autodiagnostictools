@@ -2,22 +2,26 @@ import os
 import codecs
 import re
 
-base_dir = os.path.join(os.path.expanduser("~"), "Documents", "TrustLab", "Car_mitre")
+base_dir = os.path.join(os.path.expanduser("~"), "Documents", "GitHub","autodiagnostictools","carmitre_module")
 analytics_dir = os.path.join(base_dir, "analytics")
 scripts_dir = os.path.join(base_dir, "scripts", "generated")
 
 if not os.path.exists(scripts_dir):
     os.makedirs(scripts_dir)
 
+#Archivo txt para depuracion 
 debug_file_path = os.path.join(scripts_dir, "depuracion_resultados.txt")
-debug_file = open(debug_file_path, "w", encoding="utf-8")
 
 
-def debug(message):
+#Funcion depuracion para imprimir mensajes en consola y escribir en archivo de depuracion
+def debug(message, write_to_file=True):
     print(message)
-    debug_file.write(message + "\n")
+    if write_to_file:
+        with open(debug_file_path, "a") as debug_file:
+            debug_file.write(message + "\n")
 
 
+#Plantilla para definir como se generara el script de la funcion generate_scripts 
 script_template = """
 import json
 import os
@@ -213,7 +217,7 @@ def save_results(suspicious_processes, suspicious_registry_keys, suspicious_netw
     with open(output_file, 'w', encoding='utf-8') as file:
         json.dump(results, file, indent=4)
 
-if __name__ == "__main__":
+def main():
     base_dir = os.path.dirname(os.path.abspath(__file__))
     process_logs_file = os.path.join(base_dir, "..", "..", "logs", "process_logs.json")
     registry_logs_file = os.path.join(base_dir, "..", "..", "logs", "registry_logs.json")
@@ -234,9 +238,12 @@ if __name__ == "__main__":
     print(f"Logs de aplicación sospechosos encontrados: {{len(suspicious_application_logs)}}")
     print(f"Logs de servicio sospechosos encontrados: {{len(suspicious_service_logs)}}")
     print(f"Archivos sospechosos encontrados: {{len(suspicious_file_logs)}}")
+
+if __name__ == "__main__":
+    main()
 """
 
-
+#Funcion para generar un script a partir de los pseudocodigos 
 def generate_script(analytic_id, pseudocode):
     conditions = extract_conditions(pseudocode)
 
@@ -266,7 +273,7 @@ def generate_script(analytic_id, pseudocode):
         ),
         analytic_id=analytic_id,
     )
-
+    #Escribir el script generado en un archivo
     with codecs.open(
         os.path.join(scripts_dir, f"analyze_{analytic_id}.py"), "w", encoding="utf-8"
     ) as script_file:
@@ -797,11 +804,13 @@ def read_pseudocode(file_path):
             return f.read()
 
 
-if __name__ == "__main__":
+def main():
     for analytic_file in os.listdir(analytics_dir):
         if analytic_file.endswith(".txt"):
             analytic_id = analytic_file.split(".")[0]
             pseudocode = read_pseudocode(os.path.join(analytics_dir, analytic_file))
             generate_script(analytic_id, pseudocode)
+    print("Scripts generados con éxito.")
 
-    debug_file.close()
+if __name__ == "__main__":
+    main()

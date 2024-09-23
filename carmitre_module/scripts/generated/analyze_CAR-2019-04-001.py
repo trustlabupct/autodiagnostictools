@@ -193,7 +193,7 @@ def save_results(suspicious_processes, suspicious_registry_keys, suspicious_netw
     with open(output_file, 'w', encoding='utf-8') as file:
         json.dump(results, file, indent=4)
 
-if __name__ == "__main__":
+def main():
     base_dir = os.path.dirname(os.path.abspath(__file__))
     process_logs_file = os.path.join(base_dir, "..", "..", "logs", "process_logs.json")
     registry_logs_file = os.path.join(base_dir, "..", "..", "logs", "registry_logs.json")
@@ -214,3 +214,6 @@ if __name__ == "__main__":
     print(f"Logs de aplicación sospechosos encontrados: {len(suspicious_application_logs)}")
     print(f"Logs de servicio sospechosos encontrados: {len(suspicious_service_logs)}")
     print(f"Archivos sospechosos encontrados: {len(suspicious_file_logs)}")
+
+if __name__ == "__main__":
+    main()
