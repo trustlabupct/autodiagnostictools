@@ -3,27 +3,27 @@ import re
 import socket
 
 
-class Ip:
+class Host:
     def __init__(self, ip_range):
         self.ip_range = ip_range
 
     def is_ip_valid(self):
-        try:
-            ipaddress.ip_network(self.ip_range, strict=False)
-            return True
-        except ValueError:
+        # Split addresses by spaces
+        ip_addresses = self.ip_range.split()
+        for ip in ip_addresses:
             try:
-                # Attempt to resolve domain name to IP
-                socket.gethostbyname(self.ip_range)
-                return True
-            except socket.error:
-                return "Invalid IP Range or Domain Name !"
+                # Check if it is a network or an IP address
+                ipaddress.ip_network(ip, strict=False)
+            except ValueError:
+                return "Invalid IP Format !"  # Return the error message
+        return True
 
 
 class PortRange:
     def __init__(self, port_range):
         self.port_range = port_range
 
+    # Check if it is a valid port
     def is_port_valid(self):
 
         # For a specific port
@@ -32,7 +32,7 @@ class PortRange:
             if 1 <= port <= 65535:
                 return True
             else:
-                return "Invalid Port Range !"
+                return "Invalid Port Range!"
 
         # For a range of ports
         if re.fullmatch(r"\d+-\d+", self.port_range):
@@ -40,19 +40,21 @@ class PortRange:
             if 1 <= port_start <= port_end <= 65535:
                 return True
             else:
-                return "Invalid Port Range !"
+                return "Invalid Port Range!"
 
-        return "Invalid Port Range !"
+        return "Invalid Port Range!"
 
 
 if __name__ == "__main__":
-    ip1 = Ip("192.168.1.0/24")  # True
-    ip2 = Ip("192.168.1.0")  # True
-    ip3 = Ip("192.168.1.024")  # False
-    ip4 = Ip("192.168.1.0/50")  # False
-    ip5 = Ip("192")  # False
+    host1 = Host("192.168.1.0/24")  # True
+    host2 = Host("192.168.1.0")  # True
+    host3 = Host("192.168.1.024")  # False
+    host4 = Host("192.168.1.0/50")  # False
+    host5 = Host("192")  # False
+    host6 = Host("172.28.128.0/20 192.168.56.0/24")  # True
+    host7 = Host("172.28.128.0/20 192.168.56ij4 172.20.10.0/28")  # False
     print(
-        f"Les résultats de tests ip sont : {ip1.is_ip_valid()}, {ip2.is_ip_valid()}, {ip3.is_ip_valid()}, {ip4.is_ip_valid()}, {ip5.is_ip_valid()}"
+        f"IP tests results are: {host1.is_ip_valid()}, {host2.is_ip_valid()}, {host3.is_ip_valid()}, {host4.is_ip_valid()}, {host5.is_ip_valid()}, {host6.is_ip_valid()}, {host7.is_ip_valid()}"
     )
 
     port1 = PortRange("1000")  # True
@@ -63,5 +65,5 @@ if __name__ == "__main__":
     port6 = PortRange("oeihfozei")  # False
     port7 = PortRange("1212121212")  # False
     print(
-        f"Les résultats de tests de ports sont :{port1.is_port_valid()}, {port2.is_port_valid()}, {port3.is_port_valid()}, {port4.is_port_valid()}, {port5.is_port_valid()}, {port6.is_port_valid()}, {port7.is_port_valid()}"
+        f"Port tests results are: {port1.is_port_valid()}, {port2.is_port_valid()}, {port3.is_port_valid()}, {port4.is_port_valid()}, {port5.is_port_valid()}, {port6.is_port_valid()}, {port7.is_port_valid()}"
     )
