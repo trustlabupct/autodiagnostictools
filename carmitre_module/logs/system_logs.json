@@ -1,1 +1,62 @@
-[]
+[
+    {
+        "event_id": 6,
+        "description": "Driver loaded",
+        "time_generated": "2024-09-19T07:13:13.6395861Z",
+        "computer_name": "RACM",
+        "details": {
+            "RuleName": "-",
+            "UtcTime": "2024-09-19 07:13:13.638",
+            "ImageLoaded": "C:\\Windows\\System32\\drivers\\rtwlane601.sys",
+            "Hashes": "MD5=4F9080A4FA530071D3BBD48FB3167471,SHA256=3E62FFF2962FD306B97BB19100486890AC31FBC73E686826AA03B92B53B364EF,IMPHASH=F0969719D633EF3D2F5823FCA9B22D9C",
+            "Signed": "true",
+            "Signature": "Realtek Semiconductor Corp.",
+            "SignatureStatus": "Valid"
+        }
+    },
+    {
+        "event_id": 6,
+        "description": "Driver loaded",
+        "time_generated": "2024-09-18T10:39:55.3292905Z",
+        "computer_name": "RACM",
+        "details": {
+            "RuleName": "-",
+            "UtcTime": "2024-09-18 10:39:55.328",
+            "ImageLoaded": "C:\\Program Files\\Oracle\\VirtualBox\\VBoxDDR0.r0",
+            "Hashes": "MD5=4413A4FE432303AD0F016999C0D662A0,SHA256=E890A1259093103F3AF2735439E4E67D2A232F18E96B974CE2F93CEF46A6ED9E,IMPHASH=D9279890E9C1FA9906A668612BA31D62",
+            "Signed": "true",
+            "Signature": "Oracle America, Inc.",
+            "SignatureStatus": "Valid"
+        }
+    },
+    {
+        "event_id": 6,
+        "description": "Driver loaded",
+        "time_generated": "2024-09-18T10:39:54.9604156Z",
+        "computer_name": "RACM",
+        "details": {
+            "RuleName": "-",
+            "UtcTime": "2024-09-18 10:39:54.959",
+            "ImageLoaded": "C:\\Program Files\\Oracle\\VirtualBox\\VMMR0.r0",
+            "Hashes": "MD5=70DA140A86CB4767F50A4E30A5DAB547,SHA256=A3CDDB80514D8F0B3DF07BED891F9308DE1E03957581A5F4EBA20C72D3EB51AE,IMPHASH=CA28C0CC58733FFE474156643898B95D",
+            "Signed": "true",
+            "Signature": "Oracle America, Inc.",
+            "SignatureStatus": "Valid"
+        }
+    },
+    {
+        "event_id": 6,
+        "description": "Driver loaded",
+        "time_generated": "2024-09-18T07:12:08.1785907Z",
+        "computer_name": "RACM",
+        "details": {
+            "RuleName": "-",
+            "UtcTime": "2024-09-18 07:12:08.178",
+            "ImageLoaded": "C:\\Windows\\System32\\drivers\\rtwlane601.sys",
+            "Hashes": "MD5=4F9080A4FA530071D3BBD48FB3167471,SHA256=3E62FFF2962FD306B97BB19100486890AC31FBC73E686826AA03B92B53B364EF,IMPHASH=F0969719D633EF3D2F5823FCA9B22D9C",
+            "Signed": "true",
+            "Signature": "Realtek Semiconductor Corp.",
+            "SignatureStatus": "Valid"
+        }
+    }
+]

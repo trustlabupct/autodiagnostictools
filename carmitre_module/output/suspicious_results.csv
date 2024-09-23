@@ -1,4 +1,0 @@
-analytic_id,type,details
-CAR-2022-03-001,process,"{""command_line"": ""wevtutil sl Security /e:false""}"
-CAR-2022-03-001,registry,"{""Key"": ""HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\EventLog"", ""value"": ""Start""}"
-CAR-2022-03-001,registry,"{""Key"": ""HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\EventLog"", ""value"": ""File""}"
