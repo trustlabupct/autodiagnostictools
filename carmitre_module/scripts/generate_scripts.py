@@ -2,18 +2,24 @@ import os
 import codecs
 import re
 
-base_dir = os.path.join(os.path.expanduser("~"), "Documents", "GitHub","autodiagnostictools","carmitre_module")
+base_dir = os.path.join(
+    os.path.expanduser("~"),
+    "Documents",
+    "GitHub",
+    "autodiagnostictools",
+    "carmitre_module",
+)
 analytics_dir = os.path.join(base_dir, "analytics")
 scripts_dir = os.path.join(base_dir, "scripts", "generated")
 
 if not os.path.exists(scripts_dir):
     os.makedirs(scripts_dir)
 
-#Archivo txt para depuracion 
+# Archivo txt para depuracion
 debug_file_path = os.path.join(scripts_dir, "depuracion_resultados.txt")
 
 
-#Funcion depuracion para imprimir mensajes en consola y escribir en archivo de depuracion
+# Funcion depuracion para imprimir mensajes en consola y escribir en archivo de depuracion
 def debug(message, write_to_file=True):
     print(message)
     if write_to_file:
@@ -21,7 +27,7 @@ def debug(message, write_to_file=True):
             debug_file.write(message + "\n")
 
 
-#Plantilla para definir como se generara el script de la funcion generate_scripts 
+# Plantilla para definir como se generara el script de la funcion generate_scripts
 script_template = """
 import json
 import os
@@ -243,7 +249,8 @@ if __name__ == "__main__":
     main()
 """
 
-#Funcion para generar un script a partir de los pseudocodigos 
+
+# Funcion para generar un script a partir de los pseudocodigos
 def generate_script(analytic_id, pseudocode):
     conditions = extract_conditions(pseudocode)
 
@@ -273,7 +280,7 @@ def generate_script(analytic_id, pseudocode):
         ),
         analytic_id=analytic_id,
     )
-    #Escribir el script generado en un archivo
+    # Escribir el script generado en un archivo
     with codecs.open(
         os.path.join(scripts_dir, f"analyze_{analytic_id}.py"), "w", encoding="utf-8"
     ) as script_file:
@@ -811,6 +818,7 @@ def main():
             pseudocode = read_pseudocode(os.path.join(analytics_dir, analytic_file))
             generate_script(analytic_id, pseudocode)
     print("Scripts generados con éxito.")
+
 
 if __name__ == "__main__":
     main()

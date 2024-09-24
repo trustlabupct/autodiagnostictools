@@ -49,8 +49,7 @@ def download_sysmon():
             file.write(response.content)
         print("Descarga completada.")
     else:
-        raise Exception (f"Error al descargar Sysmon: {response.status_code}")
-        
+        raise Exception(f"Error al descargar Sysmon: {response.status_code}")
 
     # Descomprimir el archivo ZIP
     print("Descomprimiendo Sysmon...")
@@ -70,7 +69,11 @@ def download_sysmon_config():
 
     # Directorio de configuración
     config_dir = os.path.join(
-        os.path.expanduser("~"), "Documents", "GitHub", "autodiagnostictools", "carmitre_module"
+        os.path.expanduser("~"),
+        "Documents",
+        "GitHub",
+        "autodiagnostictools",
+        "carmitre_module",
     )
     config_file = os.path.join(config_dir, "sysmonconfig-export.xml")
 
@@ -82,8 +85,9 @@ def download_sysmon_config():
             file.write(response.content)
         print("Configuración descargada.")
     else:
-        raise Exception(f"Error al descargar el archivo de configuración: {response.status_code}")
-        
+        raise Exception(
+            f"Error al descargar el archivo de configuración: {response.status_code}"
+        )
 
     return config_file
 
@@ -102,7 +106,6 @@ def install_sysmon(sysmon_exe, config_file):
         print("Sysmon instalado y configurado.")
     except subprocess.CalledProcessError as e:
         raise Exception(f"Error al instalar Sysmon: {e}")
-        
 
 
 def main():

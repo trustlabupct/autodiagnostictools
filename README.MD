@@ -5,3 +5,6 @@
 * reports: Folder with all the reports generated of each module
 * tests: Testing of the tools and the main 
 * utils Functions and auxiliary classes that can be used by multiple modules
+
+venv : pip install python-nmap
+       pip install black
