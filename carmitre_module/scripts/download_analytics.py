@@ -6,6 +6,7 @@ import os
 # URL de la página de CAR MITRE Analytics
 car_analytics_url = "https://car.mitre.org/analytics/"
 
+
 # Función para descargar analíticas de CAR MITRE
 def download_analytics():
     # Directorio donde se guardarán las analíticas
@@ -24,9 +25,11 @@ def download_analytics():
 
     response = requests.get(car_analytics_url)
     print(f"Accediendo a {car_analytics_url}: Estado {response.status_code}")
-    
+
     if response.status_code != 200:
-        raise Exception(f"Error al acceder a {car_analytics_url}: {response.status_code}")
+        raise Exception(
+            f"Error al acceder a {car_analytics_url}: {response.status_code}"
+        )
 
     soup = BeautifulSoup(response.content, "html.parser")
     analytics_links = soup.find_all("a", href=True)
@@ -38,13 +41,17 @@ def download_analytics():
             analytic_url = "https://car.mitre.org" + link["href"]
             print(f"Accediendo a {analytic_url}")
             analytic_response = requests.get(analytic_url)
-            print(f"Accediendo a {analytic_url}: Estado {analytic_response.status_code}")
+            print(
+                f"Accediendo a {analytic_url}: Estado {analytic_response.status_code}"
+            )
 
             if analytic_response.status_code != 200:
-                raise Exception(f"Error al acceder a {analytic_url}: {analytic_response.status_code}")
+                raise Exception(
+                    f"Error al acceder a {analytic_url}: {analytic_response.status_code}"
+                )
 
             analytic_soup = BeautifulSoup(analytic_response.content, "html.parser")
-            
+
             # Buscar la sección de pseudocódigo
             pseudocode = None
 
@@ -68,7 +75,7 @@ def download_analytics():
                 analytic_id = link["href"].split("/")[-2]
                 file_name = f"{analytic_id}.txt"
                 file_path = os.path.join(analytics_dir, file_name)
-                
+
                 # Guardar el pseudocódigo en un archivo
                 with open(file_path, "w", encoding="utf-8") as f:
                     f.write(pseudocode.text)

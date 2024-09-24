@@ -1,9 +1,16 @@
 import os
 import json
 import xmltodict
-from win32evtlog import EvtQuery, EvtNext, EvtRender, EvtRenderEventXml, EvtQueryReverseDirection
+from win32evtlog import (
+    EvtQuery,
+    EvtNext,
+    EvtRender,
+    EvtRenderEventXml,
+    EvtQueryReverseDirection,
+)
 import sys
 import ctypes
+
 
 def is_admin():
     try:
@@ -11,17 +18,20 @@ def is_admin():
     except:
         return False
 
+
 def run_as_admin():
     if not is_admin():
         print("Intentando ejecutar como administrador...")
-        ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(sys.argv), None, 1)
+        ctypes.windll.shell32.ShellExecuteW(
+            None, "runas", sys.executable, " ".join(sys.argv), None, 1
+        )
         sys.exit()
 
 
 # Definir los Event IDs que nos interesan por cada tipo de evento
 EVENT_IDS_PROCESS = [1]  # Event ID 1 para procesos
 EVENT_IDS_NETWORK = [3]  # Event ID 3 para red
-EVENT_IDS_FILE = [11]    # Event ID 11 para archivos
+EVENT_IDS_FILE = [11]  # Event ID 11 para archivos
 EVENT_IDS_REGISTRY = [12, 13]  # Event IDs 12, 13 para registro
 EVENT_IDS_APPLICATION = [7]  # Event ID 7 para aplicaciones
 EVENT_IDS_SYSTEM = [6]  # Event ID 6 para sistema
@@ -37,6 +47,7 @@ EVENT_ID_DESCRIPTIONS = {
     6: "Driver loaded",
 }
 
+
 # Función para capturar eventos y convertir el XML a JSON formateado
 def export_events(event_ids, output_file):
     try:
@@ -44,9 +55,7 @@ def export_events(event_ids, output_file):
         query = f"*[{event_ids_str}]"
 
         query_handle = EvtQuery(
-            "Microsoft-Windows-Sysmon/Operational",
-            EvtQueryReverseDirection,
-            query
+            "Microsoft-Windows-Sysmon/Operational", EvtQueryReverseDirection, query
         )
 
         events_list = []
@@ -63,19 +72,23 @@ def export_events(event_ids, output_file):
                 event_dict = xmltodict.parse(event_data)
 
                 # Formatear los datos para una salida más clara en JSON
-                sys_info = event_dict.get('Event', {}).get('System', {})
-                event_id = int(sys_info.get('EventID', 0))
-                time_generated = sys_info.get('TimeCreated', {}).get('@SystemTime', '')
-                computer_name = sys_info.get('Computer', '')
+                sys_info = event_dict.get("Event", {}).get("System", {})
+                event_id = int(sys_info.get("EventID", 0))
+                time_generated = sys_info.get("TimeCreated", {}).get("@SystemTime", "")
+                computer_name = sys_info.get("Computer", "")
 
-                event_data = event_dict.get('Event', {}).get('EventData', {}).get('Data', [])
+                event_data = (
+                    event_dict.get("Event", {}).get("EventData", {}).get("Data", [])
+                )
 
                 formatted_event = {
-                    'event_id': event_id,
-                    'description': EVENT_ID_DESCRIPTIONS.get(event_id, "Unknown"),
-                    'time_generated': time_generated,
-                    'computer_name': computer_name,
-                    'details': {data.get('@Name'): data.get('#text', '') for data in event_data}
+                    "event_id": event_id,
+                    "description": EVENT_ID_DESCRIPTIONS.get(event_id, "Unknown"),
+                    "time_generated": time_generated,
+                    "computer_name": computer_name,
+                    "details": {
+                        data.get("@Name"): data.get("#text", "") for data in event_data
+                    },
                 }
 
                 events_list.append(formatted_event)
@@ -90,6 +103,7 @@ def export_events(event_ids, output_file):
 
     except Exception as e:
         print(f"Error al capturar eventos: {e}")
+
 
 def main():
     run_as_admin()
@@ -139,6 +153,7 @@ def main():
 
     except Exception as e:
         print(f"Error: {e}")
+
 
 if __name__ == "__main__":
     main()

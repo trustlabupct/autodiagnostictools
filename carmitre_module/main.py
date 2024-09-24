@@ -12,25 +12,30 @@ def update_sysmon():
     sysmon_config_run.main()
     print("Sysmon installed.")
 
+
 def download_sysmon_logs():
     print("Downloading sysmon logs...")
     sysmon_logs.main()
     print("Sysmon logs downloaded.")
+
 
 def download_analytics_data():
     print("Downloading analytics...")
     download_analytics.main()
     print("Analytics downloaded.")
 
+
 def generate_analysis_scripts():
     print("Generating scripts...")
     generate_scripts.main()
     print("Scripts generated.")
 
+
 def execute_analyses():
     print("Running analyses...")
     run_analyses.main()
     print("Analyses finished.")
+
 
 def generate_final_report():
     print("Generating report...")

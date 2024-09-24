@@ -2,6 +2,7 @@ import sys
 import os
 import importlib.util
 
+
 def run_analyses():
     base_dir = os.path.join(
         os.path.expanduser("~"),
@@ -36,8 +37,10 @@ def run_analyses():
             except Exception as e:
                 print(f"Error: {e}")
 
+
 def main():
     run_analyses()
+
 
 if __name__ == "__main__":
     main()

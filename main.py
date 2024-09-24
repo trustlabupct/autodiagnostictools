@@ -4,12 +4,14 @@ import logging
 import argparse
 
 # Configurar el logging
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 # Paths of the modules to be imported
-sys.path.append(os.path.join(os.path.dirname(__file__), 'carmitre_module'))
-sys.path.append(os.path.join(os.path.dirname(__file__), 'clamav_module'))
-sys.path.append(os.path.join(os.path.dirname(__file__), 'nmap_module'))
+sys.path.append(os.path.join(os.path.dirname(__file__), "carmitre_module"))
+sys.path.append(os.path.join(os.path.dirname(__file__), "clamav_module"))
+sys.path.append(os.path.join(os.path.dirname(__file__), "nmap_module"))
 
 # Import modules
 try:
@@ -19,6 +21,7 @@ try:
 except ImportError as e:
     logging.error(f"Error importing modules: {e}")
     sys.exit(1)
+
 
 def run_analysis(module_name, module_main):
     """
@@ -31,6 +34,7 @@ def run_analysis(module_name, module_main):
     except Exception as e:
         logging.error(f"Error running {module_name}: {e}")
 
+
 def main():
     # Run analysis for each module
     logging.info("Starting security analysis...\n")
@@ -41,9 +45,12 @@ def main():
 
     logging.info("Security analysis finished. Reports are available in the folder.\n")
 
+
 if __name__ == "__main__":
     # Si deseas usar argparse, puedes agregar opciones aquí
-    parser = argparse.ArgumentParser(description="Run security analysis using different modules.")
+    parser = argparse.ArgumentParser(
+        description="Run security analysis using different modules."
+    )
     args = parser.parse_args()
-    
+
     main()

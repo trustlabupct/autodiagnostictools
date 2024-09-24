@@ -10,7 +10,6 @@ output_dir = os.path.join(
     "GitHub",
     "autodiagnostictools",
     "reports_module",
-    
 )
 
 # Ruta del archivo CSV que se generará
@@ -24,10 +23,12 @@ if not os.path.exists(output_dir):
 # Patrón para extraer el analytic_id del nombre del archivo
 pattern = r"suspicious_results_(.+)\.json"
 
+
 def verify_output_dir(output_dir):
     if not os.path.exists(output_dir):
         raise FileNotFoundError(f"El directorio {output_dir} no existe.")
-    
+
+
 def read_json_file(file_path):
     try:
         with open(file_path, "r", encoding="utf-8") as file:
@@ -36,7 +37,8 @@ def read_json_file(file_path):
     except (IOError, json.JSONDecodeError) as e:
         print(f"Error al leer el archivo {file_path}: {e}")
         return None
-    
+
+
 # Funcion para generar el informe CSV
 def generate_report():
     verify_output_dir(output_dir)
@@ -48,7 +50,9 @@ def generate_report():
         writer.writerow(["analytic_id", "type", "details"])
         # Iterar sobre los archivos en el directorio de salida
         for file_name in os.listdir(output_dir):
-            if file_name.startswith("suspicious_results_") and file_name.endswith(".json"):
+            if file_name.startswith("suspicious_results_") and file_name.endswith(
+                ".json"
+            ):
                 # Extraer el analytic_id usando una expresión regular
                 match = re.match(pattern, file_name)
                 if match:
@@ -91,11 +95,13 @@ def generate_report():
                     print(f"No se pudo extraer analytic_id del archivo {file_name}")
     print(f"Reporte generado en: {report_file}")
 
+
 def main():
-    try: 
+    try:
         generate_report()
     except FileNotFoundError as e:
         print(f"Error: {e}")
+
 
 if __name__ == "__main__":
     main()
