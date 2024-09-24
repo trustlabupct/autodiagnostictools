@@ -1,38 +1,59 @@
 import subprocess
 import re
 import ipaddress
+import os
 
 
-def get_windows_ip():
-    # Execute the ipconfig command
-    result = subprocess.run(
-        ["/mnt/c/Windows/System32/wsl.exe", "ipconfig.exe"], capture_output=True
-    )
-
-    # Decode the output, replacing invalid characters
-    stdout = result.stdout.decode("utf-8", errors="replace")
-
-    return stdout
+def get_ip_info():
+    try:
+        # Execute the ipconfig command
+        result = subprocess.run(
+            ["/mnt/c/Windows/System32/wsl.exe", "ipconfig.exe"], capture_output=True
+        )
+        # Decode the output, replacing invalid characters
+        stdout = result.stdout.decode("utf-8", errors="replace")
+        return stdout
+    except Exception:
+        # If ipconfig fail, ifconfig is executed
+        result = subprocess.run(
+            ["ifconfig"], capture_output=True, text=True, check=True
+        )
+        return result.stdout
 
 
 def extract_ip_and_subnet(output):
-    # Define regex patterns for different languages
+    # Define regex patterns for ipconfig (Windows) and ifconfig (Linux) in different languages
     patterns = [
         {
-            "ipv4": re.compile(r"IPv4 Address[^\d]*(\d+\.\d+\.\d+\.\d+)"),  # English
-            "subnet": re.compile(r"Subnet Mask[^\d]*: (\d+\.\d+\.\d+\.\d+)"),  # English
+            # For ipconfig output in English (Windows)
+            "ipv4": re.compile(r"IPv4 Address[^\d]*(\d+\.\d+\.\d+\.\d+)"),
+            "subnet": re.compile(r"Subnet Mask[^\d]*: (\d+\.\d+\.\d+\.\d+)"),
         },
         {
-            "ipv4": re.compile(r"Adresse IPv4[^\d]*(\d+\.\d+\.\d+\.\d+)"),  # French
-            "subnet": re.compile(r"Masque[^\n]*: (\d+\.\d+\.\d+\.\d+)"),  # French
+            # For ipconfig output in French (Windows)
+            "ipv4": re.compile(r"Adresse IPv4[^\d]*(\d+\.\d+\.\d+\.\d+)"),
+            "subnet": re.compile(r"Masque[^\n]*: (\d+\.\d+\.\d+\.\d+)"),
         },
         {
-            "ipv4": re.compile(r"Dirección IPv4[^\d]*(\d+\.\d+\.\d+\.\d+)"),  # Spanish
-            "subnet": re.compile(
-                r"Máscara de subred[^\d]*: (\d+\.\d+\.\d+\.\d+)"
-            ),  # Spanish
+            # For ipconfig output in Spanish (Windows)
+            "ipv4": re.compile(r"Dirección IPv4[^\d]*(\d+\.\d+\.\d+\.\d+)"),
+            "subnet": re.compile(r"Máscara de subred[^\d]*: (\d+\.\d+\.\d+\.\d+)"),
         },
-        # Add more languages as needed
+        {
+            # For ifconfig output in English (Linux)
+            "ipv4": re.compile(r"inet (\d+\.\d+\.\d+\.\d+)"),
+            "subnet": re.compile(r"netmask (\d+\.\d+\.\d+\.\d+)"),
+        },
+        {
+            # For ifconfig output in French (Linux)
+            "ipv4": re.compile(r"inet adr:(\d+\.\d+\.\d+\.\d+)"),
+            "subnet": re.compile(r"Masque:(\d+\.\d+\.\d+\.\d+)"),
+        },
+        {
+            # For ifconfig output in Spanish (Linux)
+            "ipv4": re.compile(r"inet dir:(\d+\.\d+\.\d+\.\d+)"),
+            "subnet": re.compile(r"Máscara:(\d+\.\d+\.\d+\.\d+)"),
+        },
     ]
 
     ipv4_addresses = []
@@ -62,7 +83,7 @@ def get_cidr_ranges(ip_subnet_dict):
 
 if __name__ == "__main__":
     # Retrieve and display IP information
-    ip_info = get_windows_ip()
+    ip_info = get_ip_info()
     print("IP Info:\n", ip_info)
 
     # Extract IP addresses and their subnet masks
