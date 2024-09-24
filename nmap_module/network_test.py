@@ -1,4 +1,4 @@
-from src.host_machine_info import get_windows_ip, extract_ip_and_subnet, get_cidr_ranges
+from src.host_machine_info import get_ip_info, extract_ip_and_subnet, get_cidr_ranges
 from src.requests import host_scanner, port_scanner_tcp_syn, port_scanner_udp
 from src.parameters import Host, PortRange
 import time
@@ -7,7 +7,7 @@ import time
 # Function for execution of the following process : info sys of windows host -> host scan on ip range -> TCP SYN scan -> UDP Scan
 def scan_all(port_range_tcp: str, port_range_udp: str):
     # Retrieve and display IP information
-    ip_info = get_windows_ip()
+    ip_info = get_ip_info()
 
     # Extract IP addresses and their subnet masks
     ip_subnet_dict = extract_ip_and_subnet(ip_info)

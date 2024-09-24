@@ -14,7 +14,9 @@ def port_scanner_tcp_syn(hosts_list, port_range):
     nmScan = nmap.PortScanner()  # Initialize the port scanner
     final_hosts = " ".join([host[0] for host in hosts_list])
     # Process a TCP Syn scan and skip discovery phase
-    nmScan.scan(hosts=final_hosts, arguments=f" -sS -Pn --top-ports {port_range}")
+    print(
+        nmScan.scan(hosts=final_hosts, arguments=f" -sS -Pn --top-ports {port_range}")
+    )
     scan_results = {}
 
     # Browse each host and retrieve the status of open or filtered ports
@@ -33,6 +35,11 @@ def port_scanner_tcp_syn(hosts_list, port_range):
                     scan_results[host][str(port)] = port_data[
                         "state"
                     ]  # Add the port and its state
+                    service_name = port_data.get("name", "unknown")
+                    scan_results[host][str(port)] = {
+                        "state": port_data["state"],
+                        "service": service_name,
+                    }  # Add the port details
     return scan_results
 
 
@@ -60,6 +67,12 @@ def port_scanner_udp(hosts_list, port_range):
                     scan_results[host][str(port)] = port_data[
                         "state"
                     ]  # Add the port and its state
+                    # Add the port, its state, and the service name (if available)
+                    service_name = port_data.get("name", "unknown")
+                    scan_results[host][str(port)] = {
+                        "state": port_data["state"],
+                        "service": service_name,
+                    }  # Add the port details
     return scan_results
 
 
@@ -70,7 +83,7 @@ if __name__ == "__main__":
     start_time = time.time()
 
     # Create IP instance and check if it is valid
-    host_instance = Host("51.79.157.107")
+    host_instance = Host("192.168.56.0/24")
     host_validation = host_instance.is_ip_valid()
 
     # Create port instance and check if it is valid
