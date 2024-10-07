@@ -4,7 +4,7 @@ from src.parameters import Host, PortRange
 import time
 
 
-# Function for execution of the following process : info sys of windows host -> host scan on ip range -> TCP SYN scan -> UDP Scan
+# Function for execution of the following process : info sys of windows/linux host -> host scan on ip range -> TCP SYN scan -> UDP Scan
 def scan_all(port_range_tcp: str, port_range_udp: str):
     # Retrieve and display IP information
     ip_info = get_ip_info()
