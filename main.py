@@ -15,7 +15,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'nmap_module'))
 try:
     from carmitre_module import main as carmitre_main
     from clamav_module import main as clamav_main
-    from nmap_module import main as nmap_main
+    from nmap_module import network_test as nmap_main
 except ImportError as e:
     logging.error(f"Error importing modules: {e}")
     sys.exit(1)

@@ -1,3 +1,5 @@
+import subprocess
+import sys
 import scripts.sysmon_config_run as sysmon_config_run
 import scripts.sysmon_logs as sysmon_logs
 import scripts.download_analytics as download_analytics
@@ -5,6 +7,21 @@ import scripts.generate_scripts as generate_scripts
 import scripts.run_analyses as run_analyses
 import scripts.generate_report as generate_report
 
+# Lista de los paquetes que necesitas
+required_packages = [
+    'beautifulsoup4', 'black', 'bs4', 'certifi', 'charset-normalizer', 'click', 'colorama', 
+    'idna', 'mypy-extensions', 'packaging', 'pathspec', 'pywin32', 'pywin32-stubs', 
+    'requests', 'soupsieve', 'urllib3', 'xmltodict'
+]
+
+def install_packages():
+    """Instala los paquetes que faltan"""
+    for package in required_packages:
+        try:
+            __import__(package)
+        except ImportError:
+            print(f"Instalando el paquete: {package}")
+            subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
 # Funciones para cada paso del proceso
 def update_sysmon():

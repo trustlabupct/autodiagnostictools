@@ -1,6 +1,7 @@
 
 import json
 import os
+import re
 
 def load_process_logs(file_path):
     try:
@@ -65,12 +66,13 @@ def load_flow_start_logs(file_path):
     except FileNotFoundError:
         print(f"Archivo no encontrado: {file_path}")
         return []
-    
+
 
 
 def filter_suspicious_processes(process_logs):
     susp_processes = []
     for process in process_logs:
+        command_line = process.get("command_line", "")
         exe = process.get("exe", "")
         cmd = process.get("command_line", "")
         image_path = process.get("image_path", "")
@@ -78,7 +80,13 @@ def filter_suspicious_processes(process_logs):
         parent_exe = process.get("parent_exe", "")
         key = process.get("key", "")
         parent_image_path = process.get("parent_image_path", "")
-        if exe == "At.exe":
+        raw_event = process.get("raw_event", "")
+        parent_image = process.get("parent_image", "")
+        image = process.get("image", "")
+        integrity_level = process.get("integrity_level", "")
+        src_ip = process.get("src_ip", "")
+        smb_write = process.get("smb_write", "")
+        if (exe == r"At.exe" or exe == r"Atbroker.exe") or (exe == r"Bash.exe" or exe == r"Bitsadmin.exe") or (exe == r"Certutil.exe" or exe == r"Cmd.exe") or (exe == r"Cmdkey.exe" or exe == r"Cmstp.exe") or (exe == r"Control.exe" or exe == r"Csc.exe") or (exe == r"Cscript.exe" or exe == r"Dfsvc.exe") or (exe == r"Diskshadow.exe" or exe == r"Dnscmd.exe") or (exe == r"Esentutl.exe" or exe == r"Eventvwr.exe") or (exe == r"Expand.exe" or exe == r"Extexport.exe") or (exe == r"Extrac32.exe" or exe == r"Findstr.exe") or (exe == r"Forfiles.exe" or exe == r"Ftp.exe") or (exe == r"Gpscript.exe" or exe == r"Hh.exe") or (exe == r"Ie4uinit.exe" or exe == r"Ieexec.exe") or (exe == r"Infdefaultinstall.exe" or exe == r"Installutil.exe") or (exe == r"Jsc.exe" or exe == r"Makecab.exe") or (exe == r"Mavinject.exe" or exe == r"Microsoft.Workflow.r.exe") or (exe == r"Mmc.exe" or exe == r"Msbuild.exe") or (exe == r"Msconfig.exe" or exe == r"Msdt.exe") or (exe == r"Mshta.exe" or exe == r"Msiexec.exe") or (exe == r"Odbcconf.exe" or exe == r"Pcalua.exe") or (exe == r"Pcwrun.exe" or exe == r"Presentationhost.exe") or (exe == r"Print.exe" or exe == r"Reg.exe") or (exe == r"Regasm.exe" or exe == r"Regedit.exe") or (exe == r"Register-cimprovider.exe" or exe == r"Regsvcs.exe") or (exe == r"Regsvr32.exe" or exe == r"Replace.exe") or (exe == r"Rpcping.exe" or exe == r"Rundll32.exe") or (exe == r"Runonce.exe" or exe == r"Runscripthelper.exe") or (exe == r"Sc.exe" or exe == r"Schtasks.exe") or (exe == r"Scriptrunner.exe" or exe == r"SyncAppvPublishingServer.exe") or (exe == r"Tttracer.exe" or exe == r"Verclsid.exe") or (exe == r"Wab.exe" or exe == r"Wmic.exe") or (exe == r"Wscript.exe" or exe == r"Wsreset.exe") or (exe == r"Xwizard.exe" or exe == r"Advpack.dll OR exe = ") or (exe == r"Appvlp.exe" or exe == r"Bginfo.exe") or (exe == r"Cdb.exe" or exe == r"csi.exe") or (exe == r"Devtoolslauncher.exe" or exe == r"dnx.exe") or (exe == r"Dxcap.exe" or exe == r"Excel.exe") or (exe == r"Mftrace.exe" or exe == r"Msdeploy.exe") or (exe == r"msxsl.exe" or exe == r"Powerpnt.exe") or (exe == r"rcsi.exe" or exe == r"Sqler.exe") or (exe == r"Sqlps.exe" or exe == r"SQLToolsPS.exe") or (exe == r"Squirrel.exe" or exe == r"te.exe") or (exe == r"Tracker.exe" or exe == r"Update.exe") or (exe == r"vsjitdebugger.exe" or exe == r"Winword.exe") or (exe == r"Wsl.exe" or exe == r"CL_Mutexverifiers.ps1 OR exe = ") or (exe == r"('At.exe', '', '', '', '')") or (exe == r"('Atbroker.exe', '', '', '', '')") or (exe == r"('Bash.exe', '', '', '', '')") or (exe == r"('Bitsadmin.exe', '', '', '', '')") or (exe == r"('Certutil.exe', '', '', '', '')") or (exe == r"('Cmd.exe', '', '', '', '')") or (exe == r"('Cmdkey.exe', '', '', '', '')") or (exe == r"('Cmstp.exe', '', '', '', '')") or (exe == r"('Control.exe', '', '', '', '')") or (exe == r"('Csc.exe', '', '', '', '')") or (exe == r"('Cscript.exe', '', '', '', '')") or (exe == r"('Dfsvc.exe', '', '', '', '')") or (exe == r"('Diskshadow.exe', '', '', '', '')") or (exe == r"('Dnscmd.exe', '', '', '', '')") or (exe == r"('Esentutl.exe', '', '', '', '')") or (exe == r"('Eventvwr.exe', '', '', '', '')") or (exe == r"('Expand.exe', '', '', '', '')") or (exe == r"('Extexport.exe', '', '', '', '')") or (exe == r"('Extrac32.exe', '', '', '', '')") or (exe == r"('Findstr.exe', '', '', '', '')") or (exe == r"('Forfiles.exe', '', '', '', '')") or (exe == r"('Ftp.exe', '', '', '', '')") or (exe == r"('Gpscript.exe', '', '', '', '')") or (exe == r"('Hh.exe', '', '', '', '')") or (exe == r"('Ie4uinit.exe', '', '', '', '')") or (exe == r"('Ieexec.exe', '', '', '', '')") or (exe == r"('Infdefaultinstall.exe', '', '', '', '')") or (exe == r"('Installutil.exe', '', '', '', '')") or (exe == r"('Jsc.exe', '', '', '', '')") or (exe == r"('Makecab.exe', '', '', '', '')") or (exe == r"('Mavinject.exe', '', '', '', '')") or (exe == r"('Microsoft.Workflow.r.exe', '', '', '', '')") or (exe == r"('Mmc.exe', '', '', '', '')") or (exe == r"('Msbuild.exe', '', '', '', '')") or (exe == r"('Msconfig.exe', '', '', '', '')") or (exe == r"('Msdt.exe', '', '', '', '')") or (exe == r"('Mshta.exe', '', '', '', '')") or (exe == r"('Msiexec.exe', '', '', '', '')") or (exe == r"('Odbcconf.exe', '', '', '', '')") or (exe == r"('Pcalua.exe', '', '', '', '')") or (exe == r"('Pcwrun.exe', '', '', '', '')") or (exe == r"('Presentationhost.exe', '', '', '', '')") or (exe == r"('Print.exe', '', '', '', '')") or (exe == r"('Reg.exe', '', '', '', '')") or (exe == r"('Regasm.exe', '', '', '', '')") or (exe == r"('Regedit.exe', '', '', '', '')") or (exe == r"('Register-cimprovider.exe', '', '', '', '')") or (exe == r"('Regsvcs.exe', '', '', '', '')") or (exe == r"('Regsvr32.exe', '', '', '', '')") or (exe == r"('Replace.exe', '', '', '', '')") or (exe == r"('Rpcping.exe', '', '', '', '')") or (exe == r"('Rundll32.exe', '', '', '', '')") or (exe == r"('Runonce.exe', '', '', '', '')") or (exe == r"('Runscripthelper.exe', '', '', '', '')") or (exe == r"('Sc.exe', '', '', '', '')") or (exe == r"('Schtasks.exe', '', '', '', '')") or (exe == r"('Scriptrunner.exe', '', '', '', '')") or (exe == r"('SyncAppvPublishingServer.exe', '', '', '', '')") or (exe == r"('Tttracer.exe', '', '', '', '')") or (exe == r"('Verclsid.exe', '', '', '', '')") or (exe == r"('Wab.exe', '', '', '', '')") or (exe == r"('Wmic.exe', '', '', '', '')") or (exe == r"('Wscript.exe', '', '', '', '')") or (exe == r"('Wsreset.exe', '', '', '', '')") or (exe == r"('Xwizard.exe', '', '', '', '')") or (exe == r"('', '', '', '', 'Advpack.dll OR exe = ')") or (exe == r"('', '', '', '', 'Ieadvpack.dll OR exe = ')") or (exe == r"('', '', '', '', 'Mshtml.dll OR exe = ')") or (exe == r"('', '', '', '', 'Setupapi.dll OR exe = ')") or (exe == r"('', '', '', '', 'Shell32.dll OR exe = ')") or (exe == r"('', '', '', '', 'Url.dll OR exe = ')") or (exe == r"('Appvlp.exe', '', '', '', '')") or (exe == r"('Bginfo.exe', '', '', '', '')") or (exe == r"('Cdb.exe', '', '', '', '')") or (exe == r"('csi.exe', '', '', '', '')") or (exe == r"('Devtoolslauncher.exe', '', '', '', '')") or (exe == r"('dnx.exe', '', '', '', '')") or (exe == r"('Dxcap.exe', '', '', '', '')") or (exe == r"('Excel.exe', '', '', '', '')") or (exe == r"('Mftrace.exe', '', '', '', '')") or (exe == r"('Msdeploy.exe', '', '', '', '')") or (exe == r"('msxsl.exe', '', '', '', '')") or (exe == r"('Powerpnt.exe', '', '', '', '')") or (exe == r"('rcsi.exe', '', '', '', '')") or (exe == r"('Sqler.exe', '', '', '', '')") or (exe == r"('Sqlps.exe', '', '', '', '')") or (exe == r"('SQLToolsPS.exe', '', '', '', '')") or (exe == r"('Squirrel.exe', '', '', '', '')") or (exe == r"('te.exe', '', '', '', '')") or (exe == r"('Tracker.exe', '', '', '', '')") or (exe == r"('Update.exe', '', '', '', '')") or (exe == r"('vsjitdebugger.exe', '', '', '', '')") or (exe == r"('Winword.exe', '', '', '', '')") or (exe == r"('Wsl.exe', '', '', '', '')") or (exe == r"('', '', '', '', 'CL_Mutexverifiers.ps1 OR exe = ')") or (exe == r"('', '', '', '', 'Manage-bde.wsf OR exe = ')") or (exe == r"('', '', '', '', 'Slmgr.vbs OR exe = ')") or (exe == r"('', '', '', '', 'winrm.vbs OR exe = ')"):
             susp_processes.append(process)
     return susp_processes
 
@@ -104,28 +112,32 @@ def filter_suspicious_network_logs(network_logs):
         proto_info = log.get("proto_info", "")
         port = log.get("port", "")
         data = log.get("data", "")
+        proto_info_rpc_interface = log.get("proto_info.rpc", "")
         if False:
             susp_network_logs.append(log)
     return susp_network_logs
 
 def filter_suspicious_system_logs(system_logs):
     susp_system_logs = []
-    for log in system_logs:
-        event_id = log.get("event_id", "")
-        event_message = log.get("event_message", "")
-        raw_event = log.get("raw_event", "")
-        log_name = log.get("log_name", "")
-        event_code = log.get("event_code", "")
-        object_type = log.get("object_type", "")
-        subject_security_id = log.get("subject_security_id", "")
-        event_code = log.get("EventCode", "")
-        auth_package = log.get("AuthenticationPackageName", "")
-        severity = log.get("Severity", "")
-        logon_type = log.get("LogonType", "")
-        param1 = log.get("param1", "")
-        param2 = log.get("param2", "")
+    for system in system_logs:
+        event_id = system.get("event_id", "")
+        event_message = system.get("event_message", "")
+        raw_event = system.get("raw_event", "")
+        log_name = system.get("log_name", "")
+        event_code = system.get("event_code", "")
+        object_type = system.get("object_type", "")
+        subject_security_id = system.get("subject_security_id", "")
+        event_code = system.get("EventCode", "")
+        auth_package = system.get("AuthenticationPackageName", "")
+        severity = system.get("Severity", "")
+        logon_type = system.get("LogonType", "")
+        param1 = system.get("param1", "")
+        param2 = system.get("param2", "")
+        target_user_name = system.get("target_user_name", "")
+        authentication_package_name = system.get("authentication_package_name", "")
+        hostname = system.get("hostname", "")
         if False:
-            susp_system_logs.append(log)
+            susp_system_logs.append(system)
     return susp_system_logs
 
 def filter_suspicious_application_logs(application_logs):
@@ -141,14 +153,16 @@ def filter_suspicious_service_logs(service_logs):
     susp_service_logs = []
     for log in service_logs:
         image_path = log.get("image_path", "")
-        if False:
+        
+        if False:  
             susp_service_logs.append(log)
     return susp_service_logs
 
-    
+
 def filter_suspicious_file_logs(file_logs):
     susp_file_logs = []
     for log in file_logs:
+        file_name = log.get("file_name", "")
         extension = log.get("extension", "")
         file_path = log.get("file_path", "")
         image_path = log.get("image_path", "")
@@ -164,7 +178,7 @@ def run_analysis(process_logs_file, registry_logs_file, network_logs_file, syste
     application_logs = load_application_logs(application_logs_file)
     service_logs = load_service_logs(service_logs_file)
     file_logs = load_file_logs(file_logs_file)
-    
+
     suspicious_processes = filter_suspicious_processes(process_logs)
     suspicious_registry_keys = filter_suspicious_registry_keys(registry_logs)
     suspicious_network_logs = filter_suspicious_network_logs(network_logs)
@@ -185,11 +199,11 @@ def save_results(suspicious_processes, suspicious_registry_keys, suspicious_netw
         "suspicious_service_logs": suspicious_service_logs,
         "suspicious_file_logs": suspicious_file_logs
     }
-    
+
     output_dir = os.path.dirname(output_file)
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
-    
+
     with open(output_file, 'w', encoding='utf-8') as file:
         json.dump(results, file, indent=4)
 
@@ -203,10 +217,10 @@ def main():
     service_logs_file = os.path.join(base_dir, "..", "..", "logs", "service_logs.json")
     file_logs_file = os.path.join(base_dir, "..", "..", "logs", "file_logs.json")
     output_file = os.path.join(base_dir, "..", "..", "output", "suspicious_results_CAR-2020-05-003.json")
-    
+
     suspicious_processes, suspicious_registry_keys, suspicious_network_logs, suspicious_system_logs, suspicious_application_logs, suspicious_service_logs, suspicious_file_logs = run_analysis(process_logs_file, registry_logs_file, network_logs_file, system_logs_file, application_logs_file, service_logs_file, file_logs_file)
     save_results(suspicious_processes, suspicious_registry_keys, suspicious_network_logs, suspicious_system_logs, suspicious_application_logs, suspicious_service_logs, suspicious_file_logs, output_file)
-    
+
     print(f"Procesos sospechosos encontrados: {len(suspicious_processes)}")
     print(f"Claves de registro sospechosas encontradas: {len(suspicious_registry_keys)}")
     print(f"Logs de red sospechosos encontrados: {len(suspicious_network_logs)}")
