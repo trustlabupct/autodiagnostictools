@@ -1,6 +1,11 @@
+# script opitimized which uses python multihread and also clamav multihreads, whcih makes it more faster
+# the las version it took 12 minutes, i will check how many it will take excluding some folders
+
 import os
 import subprocess
 import sys
+import threading
+from queue import Queue
 
 
 def check_if_root():
@@ -23,7 +28,28 @@ def ensure_directory_exists(directory):
         else:
             print(f"The directory already exists: {directory}")
     except Exception as e:
-        print(f"Error ensuring the existence of the directory {directory}: {e}")
+        print(
+            f"Error ensuring the existence of the directory {directory}: {e}"
+        )
+
+
+import subprocess
+
+
+def check_if_freshclam_running():
+    """Check if freshclam is already running."""
+    try:
+        result = subprocess.run(
+            ["pgrep", "freshclam"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+        # Si pgrep retorna un código de salida 0, significa que freshclam está corriendo.
+        return result.returncode == 0
+    except Exception as e:
+        print(f"Error checking if freshclam is running: {e}")
+        return False
 
 
 def checkClamInstallation():
@@ -38,15 +64,22 @@ def checkClamInstallation():
         )
         print("ClamAV is already installed on the system.")
         print("Installation path is: " + result.stdout.decode("utf-8").strip())
+
         print("Checking if the database is up to date...")
-        subprocess.run(["freshclam"], check=True)
-        print("The ClamAV database is up to date.")
+        # Verificar si freshclam ya está corriendo
+        if not check_if_freshclam_running():
+            subprocess.run(["freshclam"], check=True)
+            print("The ClamAV database is up to date.")
+        else:
+            print("freshclam is already running, skipping database update.")
+
     except subprocess.CalledProcessError:
         print("ClamAV is not installed. Proceeding to install it...")
         try:
             subprocess.run(["apt-get", "update"], check=True)
             subprocess.run(
-                ["apt-get", "install", "-y", "clamav", "clamav-daemon"], check=True
+                ["apt-get", "install", "-y", "clamav", "clamav-daemon"],
+                check=True,
             )
             subprocess.run(
                 [
@@ -59,8 +92,14 @@ def checkClamInstallation():
                 check=True,
             )
             print("ClamAV installation completed successfully.")
-            subprocess.run(["freshclam"], check=True)
-            print("The ClamAV database is up to date.")
+            # No ejecutar freshclam si ya está corriendo
+            if not check_if_freshclam_running():
+                subprocess.run(["freshclam"], check=True)
+                print("The ClamAV database is up to date.")
+            else:
+                print(
+                    "freshclam is already running, skipping database update."
+                )
         except subprocess.CalledProcessError as e:
             print(f"Error during ClamAV installation: {e}")
 
@@ -78,12 +117,17 @@ def startClamdWSL():
         else:
             print("Starting clamd service manually in WSL...")
             result = subprocess.run(
-                ["clamd"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
+                ["clamd"],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
             )
             if result.returncode == 0:
                 print("The clamd service has been started manually in WSL.")
             else:
-                print(f"Failed to start the clamd service: {result.stderr.strip()}")
+                print(
+                    f"Failed to start the clamd service: {result.stderr.strip()}"
+                )
     except Exception as e:
         print(f"Error trying to start clamd: {e}")
 
@@ -111,8 +155,40 @@ def get_windows_user_directories():
         raise RuntimeError(f"Error retrieving Windows user directories: {e}")
 
 
+def scan_directory(directory):
+    """Scans a single directory for infected files using ClamAV."""
+    print(f"Scanning directory: {directory}")
+    try:
+        result = subprocess.run(
+            ["clamdscan", "--multiscan", directory],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+        if "FOUND" in result.stdout:
+            print(f"Infected files found in {directory}:")
+            print("Output obtained: " + result.stdout)
+        else:
+            print(
+                f"Scan completed without finding infected files in {directory}."
+            )
+            print("Errors found: " + result.stderr)
+            print("Output obtained: " + result.stdout)
+    except subprocess.CalledProcessError as e:
+        print(f"Error scanning {directory}: {e.stderr}")
+        print(f"Standard output: {e.stdout}")
+
+
+def worker(queue):
+    """Thread worker function to scan directories from the queue."""
+    while not queue.empty():
+        directory = queue.get()
+        scan_directory(directory)
+        queue.task_done()
+
+
 def scanDirectories():
-    """Scans Windows user directories for infected files."""
+    """Scans Windows user directories for infected files using multiple threads."""
     try:
         user_dirs = get_windows_user_directories()
         directories = ["/mnt/c/Program Files (x86)/"]
@@ -124,35 +200,37 @@ def scanDirectories():
                 "C:\\Users", user_dir, "Documents"
             )
 
-            downloads_directory_wsl = windows_to_wsl_path(downloads_directory_windows)
-            documents_directory_wsl = windows_to_wsl_path(documents_directory_windows)
+            downloads_directory_wsl = windows_to_wsl_path(
+                downloads_directory_windows
+            )
+            documents_directory_wsl = windows_to_wsl_path(
+                documents_directory_windows
+            )
 
             if os.path.exists(downloads_directory_wsl):
                 directories.append(downloads_directory_wsl)
             if os.path.exists(documents_directory_wsl):
                 directories.append(documents_directory_wsl)
 
+        # Create a queue and add directories to it
+        queue = Queue()
         for directory in directories:
-            print(f"Scanning directory: {directory}")
-            try:
-                result = subprocess.run(
-                    ["clamdscan", directory],
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
-                    text=True,
-                )
+            queue.put(directory)
 
-                if "FOUND" in result.stdout:
-                    print(f"Infected files found in {directory}:")
-                    print("Output obtained: " + result.stdout)
-                else:
-                    print(
-                        f"Scan completed without finding infected files in {directory}."
-                    )
-                    print("Errors found: " + result.stderr)
-                    print("Output obtained: " + result.stdout)
-            except subprocess.CalledProcessError as e:
-                print(f"Error scanning {directory}: {e.stderr}")
-                print(f"Standard output: {e.stdout}")
+        # Start multiple threads to scan the directories in parallel
+        num_threads = min(4, len(directories))  # Limiting to 4 threads
+        threads = []
+        for i in range(num_threads):
+            thread = threading.Thread(target=worker, args=(queue,))
+            thread.start()
+            threads.append(thread)
+
+        # Wait for all threads to finish
+        for thread in threads:
+            thread.join()
+
+        print("All scans completed.")
+
     except Exception as e:
         print(f"An error occurred: {e}")
+
