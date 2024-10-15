@@ -6,5 +6,10 @@
 * tests: Testing of the tools and the main 
 * utils Functions and auxiliary classes that can be used by multiple modules
 
-venv : pip install python-nmap
-       pip install black
+venv :   
+       pip install python-nmap  
+       pip install black  
+       pip install customtkinter  
+       pip install requests  
+       pip install xmltodict  
+       pip install win32evtlog  
