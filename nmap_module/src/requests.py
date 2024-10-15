@@ -14,9 +14,7 @@ def port_scanner_tcp_syn(hosts_list, port_range):
     nmScan = nmap.PortScanner()  # Initialize the port scanner
     final_hosts = " ".join([host[0] for host in hosts_list])
     # Process a TCP Syn scan and skip discovery phase
-    print(
-        nmScan.scan(hosts=final_hosts, arguments=f" -sS -Pn --top-ports {port_range}")
-    )
+    nmScan.scan(hosts=final_hosts, arguments=f" -sS -Pn --top-ports {port_range}")
     scan_results = {}
 
     # Browse each host and retrieve the status of open or filtered ports
