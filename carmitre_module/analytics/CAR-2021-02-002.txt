@@ -1,4 +1,4 @@
-processes = search Process
+processes = search Process:Create
 suspicious_processes = filter processes where (
   (parent_image_path == C:\Windows\System32\services.exe" AND
    image_path == "C:\Windows\System32\cmd.exe" AND
