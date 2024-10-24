@@ -28,9 +28,7 @@ def ensure_directory_exists(directory):
         else:
             print(f"The directory already exists: {directory}")
     except Exception as e:
-        print(
-            f"Error ensuring the existence of the directory {directory}: {e}"
-        )
+        print(f"Error ensuring the existence of the directory {directory}: {e}")
 
 
 import subprocess
@@ -97,9 +95,7 @@ def checkClamInstallation():
                 subprocess.run(["freshclam"], check=True)
                 print("The ClamAV database is up to date.")
             else:
-                print(
-                    "freshclam is already running, skipping database update."
-                )
+                print("freshclam is already running, skipping database update.")
         except subprocess.CalledProcessError as e:
             print(f"Error during ClamAV installation: {e}")
 
@@ -125,9 +121,7 @@ def startClamdWSL():
             if result.returncode == 0:
                 print("The clamd service has been started manually in WSL.")
             else:
-                print(
-                    f"Failed to start the clamd service: {result.stderr.strip()}"
-                )
+                print(f"Failed to start the clamd service: {result.stderr.strip()}")
     except Exception as e:
         print(f"Error trying to start clamd: {e}")
 
@@ -169,9 +163,7 @@ def scan_directory(directory):
             print(f"Infected files found in {directory}:")
             print("Output obtained: " + result.stdout)
         else:
-            print(
-                f"Scan completed without finding infected files in {directory}."
-            )
+            print(f"Scan completed without finding infected files in {directory}.")
             print("Errors found: " + result.stderr)
             print("Output obtained: " + result.stdout)
     except subprocess.CalledProcessError as e:
@@ -200,12 +192,8 @@ def scanDirectories():
                 "C:\\Users", user_dir, "Documents"
             )
 
-            downloads_directory_wsl = windows_to_wsl_path(
-                downloads_directory_windows
-            )
-            documents_directory_wsl = windows_to_wsl_path(
-                documents_directory_windows
-            )
+            downloads_directory_wsl = windows_to_wsl_path(downloads_directory_windows)
+            documents_directory_wsl = windows_to_wsl_path(documents_directory_windows)
 
             if os.path.exists(downloads_directory_wsl):
                 directories.append(downloads_directory_wsl)
@@ -233,4 +221,3 @@ def scanDirectories():
 
     except Exception as e:
         print(f"An error occurred: {e}")
-

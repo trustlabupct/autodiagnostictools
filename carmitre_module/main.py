@@ -9,10 +9,25 @@ import scripts.generate_report as generate_report
 
 # Lista de los paquetes que necesitas
 required_packages = [
-    'beautifulsoup4', 'black', 'bs4', 'certifi', 'charset-normalizer', 'click', 'colorama', 
-    'idna', 'mypy-extensions', 'packaging', 'pathspec', 'pywin32', 'pywin32-stubs', 
-    'requests', 'soupsieve', 'urllib3', 'xmltodict'
+    "beautifulsoup4",
+    "black",
+    "bs4",
+    "certifi",
+    "charset-normalizer",
+    "click",
+    "colorama",
+    "idna",
+    "mypy-extensions",
+    "packaging",
+    "pathspec",
+    "pywin32",
+    "pywin32-stubs",
+    "requests",
+    "soupsieve",
+    "urllib3",
+    "xmltodict",
 ]
+
 
 def install_packages():
     """Instala los paquetes que faltan"""
@@ -22,6 +37,7 @@ def install_packages():
         except ImportError:
             print(f"Instalando el paquete: {package}")
             subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+
 
 # Funciones para cada paso del proceso
 def update_sysmon():
