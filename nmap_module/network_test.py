@@ -1,11 +1,19 @@
-from nmap_module.src.host_machine_info import get_ip_info, extract_ip_and_subnet, get_cidr_ranges
-from nmap_module.src.requests import host_scanner, port_scanner_tcp_syn, port_scanner_udp
+from nmap_module.src.host_machine_info import (
+    get_ip_info,
+    extract_ip_and_subnet,
+    get_cidr_ranges,
+)
+from nmap_module.src.requests import (
+    host_scanner,
+    port_scanner_tcp_syn,
+    port_scanner_udp,
+)
 from nmap_module.src.parameters import Host, PortRange
 import time
 
 
 def scan_all(port_range_tcp: str, port_range_udp: str):
-    print(f"scan_all function called")  # Debug
+    # print(f"scan_all function called")  # Debug
     # Retrieve and display IP information
     ip_info = get_ip_info()
 
@@ -45,7 +53,7 @@ def scan_all(port_range_tcp: str, port_range_udp: str):
         udp_results = port_scanner_udp(final_list, port_range_udp)
 
         # Return active hosts with scan results
-        print(f"Execution finished")  # Debug
+        # print(f"Execution finished")  # Debug
         return active_hosts, tcp_results, udp_results
     else:
         # Print errors if there are any

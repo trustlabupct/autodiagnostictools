@@ -31,9 +31,7 @@ def modify_clamd_conf(clamd_conf_path):
             content = file.readlines()
 
         # Reopen the file to append the modifications
-        with open(
-            clamd_conf_path, "a"
-        ) as file:  # Using "a" to avoid overwriting
+        with open(clamd_conf_path, "a") as file:  # Using "a" to avoid overwriting
             # Add directory exclusions if they're not already present
             for exclude_line in exclude_lines_dir:
                 if exclude_line not in content:
@@ -46,4 +44,3 @@ def modify_clamd_conf(clamd_conf_path):
 
 
 # Path to the clamd.conf file (adjust this path as needed)
-
