@@ -1,0 +1,4 @@
+{"time_generated": "2025-10-15T10:00:00Z", "host": "lab-host", "log_type": "Process", "event_type": "Process:Create", "exe": "cmd.exe", "severity": "medium", "command_line": "cmd.exe /c whoami"}
+{"time_generated": "2025-10-15T10:05:00Z", "host": "lab-host", "log_type": "Process", "event_type": "Process:Create", "exe": "schtasks.exe", "severity": "medium", "command_line": "schtasks.exe /create /tn backup"}
+{"time_generated": "2025-10-15T10:10:00Z", "host": "lab-host", "log_type": "Flow", "event_type": "Flow:Message", "dest_port": "445", "protocol": "smb.write", "severity": "high"}
+{"time_generated": "2025-10-15T10:15:00Z", "host": "lab-host", "log_type": "Process", "event_type": "Process:Create", "exe": "notepad.exe", "severity": "low"}

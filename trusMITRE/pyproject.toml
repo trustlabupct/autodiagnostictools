@@ -1,0 +1,71 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "trustmitre"
+version = "2025.10.15"
+description = "Trust-based CAR analytics ingestion, compilation, and detection runner for MITRE telemetry."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [
+  {name = "Volodymyr Dubetskyy"}
+]
+dependencies = [
+  "pydantic>=2",
+  "pydantic-settings>=2.3",
+  "typer>=0.12",
+  "rich>=13.0",
+  "requests>=2.31",
+  "beautifulsoup4>=4.12",
+  "xmltodict>=0.13",
+  "tqdm>=4.66",
+  "jinja2>=3.1"
+]
+
+[project.optional-dependencies]
+windows = ["pywin32>=306"]
+offline_evtx = ["python-evtx>=0.6"]
+huge_json = ["ijson>=3.2"]
+
+env = ["python-dotenv>=1.0"]
+
+[project.scripts]
+trustmitre = "trustmitre.cli:app"
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+exclude = [
+  ".eggs",
+  "build",
+  "dist",
+  "output",
+  ".compiled"
+]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+mypy_path = ["src"]
+ignore_missing_imports = true
+show_error_codes = true
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q"
+testpaths = [
+  "tests"
+]
+
+[tool.coverage.run]
+branch = true
+source = ["trustmitre"]
+
+[tool.trustmitre]
+contact = "volodymyr,dubetskyy@upct.es"

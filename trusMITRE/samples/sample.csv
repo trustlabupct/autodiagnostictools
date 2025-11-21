@@ -1,0 +1,2 @@
+log_type,event_type,exe,time_generated,host
+Process,Process:Create,calc.exe,2025-10-15T11:00:00Z,lab-host

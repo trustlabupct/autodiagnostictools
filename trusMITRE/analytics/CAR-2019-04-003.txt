@@ -1,0 +1,6 @@
+processes = search Process:Create
+squiblydoo_processes = filter processes where (
+  image_path == "*regsvr32.exe" and command_line == "*scrobj.dll"
+  )
+output squiblydoo_processes
+
