@@ -13,6 +13,7 @@ import logging
 import platform
 import signal
 import sys
+import threading
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from typing import List, Optional
@@ -248,7 +249,9 @@ def cmd_scan(args: argparse.Namespace) -> int:
         cancelled["flag"] = True
         raise KeyboardInterrupt()
 
-    previous_handler = signal.signal(signal.SIGINT, handle_signal)
+    previous_handler = None
+    if threading.current_thread() is threading.main_thread():
+        previous_handler = signal.signal(signal.SIGINT, handle_signal)
 
     try:
         result = run_scan(
@@ -267,16 +270,19 @@ def cmd_scan(args: argparse.Namespace) -> int:
             dry_run=config.dry_run,
         )
     except KeyboardInterrupt:
-        signal.signal(signal.SIGINT, previous_handler)
+        if previous_handler is not None:
+            signal.signal(signal.SIGINT, previous_handler)
         _write_cancelled(prefix, targets, discovery)
         print("\nScan cancelled by user. Partial reports saved.")
         return 2
     except ClamAVScanError as exc:
-        signal.signal(signal.SIGINT, previous_handler)
+        if previous_handler is not None:
+            signal.signal(signal.SIGINT, previous_handler)
         logging.error("%s", exc)
         return 2
 
-    signal.signal(signal.SIGINT, previous_handler)
+    if previous_handler is not None:
+        signal.signal(signal.SIGINT, previous_handler)
 
     status = result.get("status")
     if status == "infected":
