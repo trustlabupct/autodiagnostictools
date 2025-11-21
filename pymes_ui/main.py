@@ -652,21 +652,20 @@ class PYMEsUnifiedUI:
         options_pane.add(cmd_frame)
         
         commands = [
-            ("quickstart", "Quickstart (Run full pipeline)"),
-            ("download", "Download/Update Analytics"),
-            ("compile", "Compile Analytics"),
-            ("ingest", "Ingest/Normalize Logs"),
-            ("run", "Execute Analytics"),
-            ("report", "Generate Reports"),
-            ("clean", "Clean Artifacts"),
-            ("validate-config", "Check Configuration"),
-            ("schema", "Show Data Schema")
+            ("Quickstart", "quickstart", "Quickstart (Run full pipeline)"),
+            ("Download", "download", "Download/Update Analytics"),
+            ("Compile", "compile", "Compile Analytics"),
+            ("Ingest", "ingest", "Ingest/Normalize Logs"),
+            ("Run", "run", "Execute Analytics"),
+            ("Report", "report", "Generate Reports"),
+            ("Clean", "clean", "Clean Artifacts"),
+            ("Validate Config", "validate-config", "Check Configuration"),
+            ("Schema", "schema", "Show Data Schema")
         ]
         
         self.trustmitre_command = tk.StringVar(value="quickstart")
-        for cmd, desc in commands:
-            display_text = cmd.replace("-", " ").title()
-            rb = ttk.Radiobutton(cmd_frame, text=display_text, value=cmd, variable=self.trustmitre_command, command=self.update_trustmitre_options)
+        for display, val, desc in commands:
+            rb = ttk.Radiobutton(cmd_frame, text=display, value=val, variable=self.trustmitre_command, command=self.update_trustmitre_options)
             rb.pack(anchor=tk.W, padx=5, pady=2)
             ModernTooltip(rb, desc)
 
