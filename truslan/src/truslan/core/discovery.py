@@ -12,6 +12,11 @@ import logging
 import re
 from typing import List, Optional, Set
 from pathlib import Path
+try:
+    import psutil
+    HAS_PSUTIL = True
+except ImportError:
+    HAS_PSUTIL = False
 
 logger = logging.getLogger("truslan")
 
@@ -27,6 +32,14 @@ def discover_local_networks() -> List[str]:
 
     logger.info(f"Discovering local networks on {system}")
 
+    logger.info(f"Discovering local networks on {system}")
+
+    if HAS_PSUTIL:
+        networks = _discover_psutil()
+        if networks:
+            return networks
+        logger.warning("psutil discovery returned no networks, falling back to OS commands")
+
     if system == "Windows":
         return _discover_windows()
     elif system == "Linux":
@@ -35,6 +48,46 @@ def discover_local_networks() -> List[str]:
         return _discover_macos()
     else:
         logger.warning(f"Unsupported platform: {system}")
+        return []
+
+
+def _discover_psutil() -> List[str]:
+    """
+    Discover networks using psutil (cross-platform).
+    """
+    logger.debug("Using psutil for network discovery")
+    cidrs = set()
+
+    try:
+        stats = psutil.net_if_stats()
+        addrs = psutil.net_if_addrs()
+
+        for nic, addresses in addrs.items():
+            # Skip down interfaces
+            if nic in stats and not stats[nic].isup:
+                continue
+
+            for addr in addresses:
+                # IPv4 only
+                if addr.family == 2:  # socket.AF_INET
+                    ip = addr.address
+                    netmask = addr.netmask
+
+                    if ip and netmask:
+                        try:
+                            prefix_len = _netmask_to_prefix(netmask)
+                            cidr = _calculate_network_cidr(ip, prefix_len)
+                            if cidr and not _is_loopback_network(cidr):
+                                cidrs.add(cidr)
+                        except Exception as e:
+                            logger.debug(f"Error calculating CIDR for {ip}/{netmask}: {e}")
+
+        result_list = sorted(list(cidrs))
+        if result_list:
+            logger.info(f"Discovered {len(result_list)} networks (psutil): {result_list}")
+        return result_list
+    except Exception as e:
+        logger.error(f"psutil discovery failed: {e}")
         return []
 
 
