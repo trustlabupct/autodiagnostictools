@@ -30,7 +30,7 @@ def resolve_output_prefix(value: str) -> Path:
         prefix = candidate
     else:
         parts = candidate.parts
-        if parts and parts[0].lower() == "out":
+        if parts and parts[0].lower() in ("out", "output"):
             prefix = candidate
         else:
             prefix = DEFAULT_OUTPUT_DIR / candidate
