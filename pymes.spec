@@ -18,6 +18,7 @@ from PyInstaller.utils.hooks import collect_all
 
 datas = [
     (str(project_root / "trusMITRE" / "analytics"), "trusMITRE/analytics"),
+    (str(project_root / "assets" / "icon.ico"), "assets"),
 ]
 binaries = []
 hiddenimports = [
