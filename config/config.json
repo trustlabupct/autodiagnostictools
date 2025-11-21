@@ -1,7 +1,0 @@
-{
-    "analytics_repo_url": "https://car.mitre.org/analytics/",
-    "logs_dir": "C:/Users/raulr/Documents/GitHub/autodiagnostictools/carmitre_module/logs/",
-    "analytics_dir": "C:/Users/raulr/Documents/GitHub/autodiagnostictools/carmitre_module/analytics/",
-    "scripts_dir": "C:/Users/raulr/Documents/GitHub/autodiagnostictools/carmitre_module/scripts/",
-    "output_dir": "C:/Users/raulr/Documents/GitHub/autodiagnostictools/carmitre_module/output/"
-}

@@ -1,4 +1,0 @@
-processes = search Process:Create
-rar_argument = filter processes where (command_line == "* a *")
-output rar_argument
-

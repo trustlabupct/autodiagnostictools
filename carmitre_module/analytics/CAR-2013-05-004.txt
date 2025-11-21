@@ -1,3 +1,0 @@
-process = search Process:Create
-at = filter process where (exe == "at.exe")
-output at

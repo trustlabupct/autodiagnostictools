@@ -1,0 +1,22 @@
+# TrusLAN v1.3.0 - Minimal Dependencies
+# Python 3.9+ required
+
+# Core dependencies
+python-nmap>=0.7.1
+jinja2>=3.1.0
+tqdm>=4.65.0
+
+# Optional: TOML configuration support
+# Uncomment if you want config file support
+# tomli>=2.0.0; python_version < "3.11"
+
+# Development dependencies (uncomment for development)
+# pytest>=7.4.0
+# pytest-cov>=4.1.0
+# mypy>=1.5.0
+# ruff>=0.1.0
+
+# Note: Ensure nmap is installed on your system
+# - Ubuntu/Debian: sudo apt-get install nmap
+# - macOS: brew install nmap
+# - Windows: Download from https://nmap.org/download.html

@@ -1,4 +1,0 @@
-process = search Process:Create
-powershell = filter process where (exe == "powershell.exe" AND parent_exe != "explorer.exe" )
-output powershell
-

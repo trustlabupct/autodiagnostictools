@@ -1,4 +1,0 @@
-log_name == "Security" AND
-event_code == "4670" AND
-object_type == "File" AND
-subject_security_id != "NT AUTHORITY\SYSTEM"

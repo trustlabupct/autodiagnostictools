@@ -1,4 +1,0 @@
-process = search Process:Create
-schtasks = filter process where (exe == "schtasks.exe")
-output schtasks
-

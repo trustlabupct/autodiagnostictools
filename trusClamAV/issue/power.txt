@@ -1,0 +1,14 @@
+PS C:\Users\trust\Documents\trusClamAV_4> python -m trusClamAV --log-level DEBUG scan --targets C:\Users\trust\Documents\trusClamAV_4\ --use-clamd --out C:\Users\trust\Documents\trusClamAV_4\scan
+2025-10-16 12:06:57,445 DEBUG trusClamAV.clamav_backend: Executing command: C:\ProgramData\chocolatey\bin\clamscan.exe --version
+2025-10-16 12:06:58,482 INFO trusClamAV.clamav_backend: Starting clamd daemon: C:\ProgramData\chocolatey\bin\clamd.exe --config-file C:\ProgramData\trusClamAV\config\clamd.conf
+2025-10-16 12:07:08,045 INFO trusClamAV.clamav_backend: clamd daemon is ready.
+2025-10-16 12:07:08,045 INFO trusClamAV.clamav_backend: Executing scan: C:\ProgramData\chocolatey\bin\clamdscan.exe --infected --verbose --config-file C:\ProgramData\trusClamAV\config\clamd.conf C:\Users\trust\Documents\trusClamAV_4
+2025-10-16 12:07:08,046 DEBUG trusClamAV.clamav_backend: Executing command: C:\ProgramData\chocolatey\bin\clamdscan.exe --infected --verbose --config-file C:\ProgramData\trusClamAV\config\clamd.conf C:\Users\trust\Documents\trusClamAV_4
+2025-10-16 12:07:15,157 INFO trusClamAV.clamav_backend: Stopping clamd daemon (pid 8160).
+Scan complete.
+Status          : clean
+Files scanned   : 0
+Infected files  : 0
+Report (txt)    : C:\Users\trust\Documents\trusClamAV_4\scan.txt
+Report (json)   : C:\Users\trust\Documents\trusClamAV_4\scan.json
+PS C:\Users\trust\Documents\trusClamAV_4>

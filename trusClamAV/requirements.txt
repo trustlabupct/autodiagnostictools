@@ -1,0 +1,1 @@
+# trusClamAV CLI relies on the Python standard library only.

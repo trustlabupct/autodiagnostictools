@@ -1,4 +1,0 @@
-services = search Service:create
-suspicious_services = filter services where image_path = "*\.exe" AND image_path does not contain ["C:\\Windows\\*", "%windir%\\*", "C:\\Program File*", "C:\\Programdata\\*", "%systemroot%\\*"] 
-output suspicious_services
-

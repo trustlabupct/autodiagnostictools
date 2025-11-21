@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "timestamp": "2025-10-16T10:11:37.390310Z",
+  "tool": {
+    "name": "trusClamAV",
+    "clamav_version": "1.4.2/27794/Thu",
+    "engine": "clamdscan.exe"
+  },
+  "targets": [
+    "C:\\Users\\trust\\Documents\\trusClamAV_4"
+  ],
+  "exclusions": [],
+  "files_scanned": 0,
+  "infected_count": 0,
+  "infected_files": [],
+  "elapsed_seconds": 7.65,
+  "status": "clean",
+  "errors": []
+}

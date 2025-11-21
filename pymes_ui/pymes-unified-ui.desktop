@@ -1,0 +1,23 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=PYMEs Unified Security Toolkit
+Comment=Unified interface for TrusLAN, trusClamAV, and trustMITRE security tools
+Exec=/home/vladymyr/Desktop/PYMEs/pymes_ui/launch.sh
+Icon=security
+Terminal=false
+Categories=System;Security;Network;
+Keywords=security;network;scanner;antivirus;malware;analytics;truslan;trusclamav;trustmitre;
+StartupNotify=true
+StartupWMClass=tk
+
+# Additional metadata
+GenericName=Security Toolkit
+GenericName[es]=Kit de Herramientas de Seguridad
+X-GNOME-FullName=PYMEs Unified Security Toolkit
+X-GNOME-UsesNotifications=false
+
+# Author information
+X-Author=Volodymyr Dubetskyy
+X-Organization=Trust Lab UPCT
+X-Contact=volodymyr.dubetskyy@upct.es

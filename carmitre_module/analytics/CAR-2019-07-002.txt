@@ -1,6 +1,0 @@
-processes = search Process:Create
-procdump_lsass = filter processes where (
-  exe = "procdump*.exe"  and
-  command_line = "*lsass*")
-output procdump_lsass
-

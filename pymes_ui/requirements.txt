@@ -1,0 +1,11 @@
+# PYMEs Unified UI Requirements
+# Cross-platform GUI for TrusLAN, trusClamAV, and trustMITRE
+
+# Core GUI dependencies (tkinter is included with Python)
+# No additional GUI dependencies needed as tkinter is built-in
+
+# Optional: Enhanced widgets (uncomment if needed)
+# ttkthemes>=3.2.2
+
+# Python version requirement: 3.9+
+# The application uses tkinter which comes bundled with Python

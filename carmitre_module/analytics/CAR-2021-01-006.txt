@@ -1,6 +1,0 @@
-processes = search Process:Create
-target_processes = filter processes where (
-     (parent_image="*excel.exe" OR parent_image="*word.exe" OR parent_image="*outlook.exe")
-     AND image="*.exe"
-     )
-

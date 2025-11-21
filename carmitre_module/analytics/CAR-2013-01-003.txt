@@ -1,5 +1,0 @@
-flow = search Flow:Message
-smb_events = filter flow where (dest_port == "445" and protocol == "smb")
-smb_events.file_name = smb_events.proto_info.file_name
-output smb_write
-

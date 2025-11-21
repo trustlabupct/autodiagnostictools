@@ -1,0 +1,66 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "truslan"
+version = "1.3.0"
+description = "TrusLAN — LAN Exposure Scanner (SMB/RDP/HTTP/TLS/SSH/UDP)"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+keywords = ["security", "scanner", "network", "lan", "smb", "rdp", "http", "tls", "ssh", "udp", "vulnerability", "assessment"]
+authors = [
+    {name = "Volodymyr Dubetskyy", email = "volodymyr.dubetskyy@upct.es"},
+]
+maintainers = [
+    {name = "TRUST Lab UPCT", email = "volodymyr.dubetskyy@upct.es"},
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: System Administrators",
+    "Intended Audience :: Information Technology",
+    "Topic :: Security",
+    "Topic :: System :: Networking",
+    "Topic :: System :: Systems Administration",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+    "Environment :: Console",
+]
+dependencies = [
+    "jinja2>=3.0.0",
+    "tqdm>=4.65.0",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/trustlabupct/truslan"
+"Documentation" = "https://github.com/trustlabupct/truslan/blob/main/README.md"
+"Bug Tracker" = "https://github.com/trustlabupct/truslan/issues"
+"Source" = "https://github.com/trustlabupct/truslan"
+
+[project.scripts]
+truslan = "truslan.cli:main"
+
+[tool.setuptools]
+include-package-data = true
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"truslan" = ["*.md", "examples/*.sh"]
+"truslan.reports" = ["templates/*.html"]
+
+[tool.truslan]
+# Default configuration for TrusLAN
+default_profile = "safe"
+default_timing = "T3"
+default_top_ports = 1000
+default_batch_size = 64
+auto_save_xml = false

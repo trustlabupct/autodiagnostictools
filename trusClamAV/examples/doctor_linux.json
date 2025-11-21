@@ -1,0 +1,25 @@
+{
+  "os": "linux",
+  "paths": {
+    "clamscan": "/usr/bin/clamscan",
+    "clamdscan": "/usr/bin/clamdscan",
+    "freshclam": "/usr/bin/freshclam",
+    "db_dir": "/var/lib/clamav",
+    "config_dir": "/tmp/trusClamAV/config",
+    "logs_dir": "/tmp/trusClamAV/logs",
+    "reports_dir": "/tmp/trusClamAV/reports"
+  },
+  "versions": {
+    "clamav": "1.4.3/27792/Tue",
+    "engine": null
+  },
+  "db": {
+    "age_days": 0.01,
+    "exists": true
+  },
+  "discovery_method": "clamscan:PATH > clamdscan:PATH > freshclam:PATH",
+  "admin": false,
+  "hints": [
+    "Signature directory is not writable; run updates with administrative privileges."
+  ]
+}
