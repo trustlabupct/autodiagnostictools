@@ -665,7 +665,8 @@ class PYMEsUnifiedUI:
         
         self.trustmitre_command = tk.StringVar(value="quickstart")
         for cmd, desc in commands:
-            rb = ttk.Radiobutton(cmd_frame, text=cmd, value=cmd, variable=self.trustmitre_command, command=self.update_trustmitre_options)
+            display_text = cmd.replace("-", " ").title()
+            rb = ttk.Radiobutton(cmd_frame, text=display_text, value=cmd, variable=self.trustmitre_command, command=self.update_trustmitre_options)
             rb.pack(anchor=tk.W, padx=5, pady=2)
             ModernTooltip(rb, desc)
 
